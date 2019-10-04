@@ -17,9 +17,10 @@
  * @tparam Predicate Predicate
  */
 template<typename Predicate>
-class PredicateCondition final
+class PredicateCondition
         : public SPtrFactoryBase<PredicateCondition<Predicate>>
-        , public ThreadSafeBase {
+        , public ThreadSafeBase 
+{
 public:
     /**
      * @brief Ctor
@@ -29,11 +30,17 @@ public:
     PredicateCondition(const PredicateCondition &) = delete;
     const PredicateCondition &operator=(const PredicateCondition &) = delete;
 
+    /**
+     * @brief Notifies one thread waiting on condition variable
+     */
     void notify_one() {
         std::lock_guard<std::mutex> guard(mutex);
         cond.notify_one();
     }
 
+    /**
+     * @brief Notifies all threads waiting on condition variable
+     */
     void notify_all() {
         std::lock_guard<std::mutex> guard(mutex);
         cond.notify_all();
